@@ -8,9 +8,6 @@
    content="IE=edge"
   />
 
-  <!-- 自動でリンクに飛びたいなら -->
-  <!-- <meta http-equiv="refresh" content="秒数;url=リンク先のURL"> -->
-
   <!-- レスポンシブ用 -->
   <meta
    name="viewport"
@@ -32,7 +29,7 @@
   <!-- <meta name="googlebot" content="noindex,nofollow"> -->
 
   <!-- ここから下はページに合わせて編集------------ -->
-  <title>ページのタイトル</title>
+  <title>rybcオープンテスト用のページ</title>
 
   <meta
    name="description"
@@ -45,69 +42,30 @@
    href="style.css"
   />
 
-  <!-- 普通のファビコン -->
-  <!-- <link rel="icon" type="image/png" href="" sizes="16x16"> -->
-  <!-- <link rel="icon" type="image/png" href="" sizes="32x32"> -->
-  <!-- ios用のファビコン -->
-  <!-- <link rel="apple-touch-icon" href="" sizes="180x180"> -->
-  <!-- Android Chrome用のファビコン -->
-  <!-- <link rel="icon" type="image/png" href="" sizes="192x192"> -->
-  <!-- microsoft pin用アイコン -->
-  <!-- <meta name="msapplication-TileImage" content="画像のURL" /> -->
-  <!-- pinの色を指定したいなら -->
-  <!-- <meta name="msapplication-TileColor" content="カラーコード（例：#F89174）"/> -->
-
-  <!-- ios用のPWA設定 -->
-  <!-- <meta name="apple-mobile-web-app-capable" content="yes"> -->
-  <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> -->
-  <!-- <meta name="apple-mobile-web-app-title" content="アプリの名前をここに書く"> -->
-
-  <!-- ogp -->
-  <!--
-    <meta property="og:url" content="ページのURL" />
-    <meta property="og:title" content="ページのタイトル" />
-    -->
-  <!-- トップページなら website 、記事ページなら article と入力 -->
-  <!--
-    <meta property="og:type" content="ページのタイプ">
-    <meta property="og:description" content="記事の抜粋" />
-    <meta property="og:image" content="画像のURL" />
-    <meta property="og:site_name" content="サイト名" />
-    <meta property="og:locale" content="ja_JP" />
-    -->
-  <!-- summaryかsummary_large_image -->
-  <!--
-    <meta name="twitter:card" content="カード種類" />
-    <meta name="twitter:site" content="@Twitterユーザー名" />
-    <meta property="fb:app_id" content="appIDを入力">
-    -->
-
   <!--googleフォント -->
   <link
    href="https://fonts.googleapis.com/css?family=M+PLUS+1p"
    rel="stylesheet"
   />
 
+  <!--a-frame -->
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+
   <script
    src="main.js"
    defer
   ></script>
-
-  <!-- PWA用のmanifest -->
-  <!-- <link rel="manifest" href="manifest.json"> -->
  </head>
  <body>
-  <h1>てすとtest</h1>
-
-  <!-- PWAにしたいなら下記のコメントを外してserviceworker.jsを読みこむ -->
-  <!-- <script type="application/javascript">
- if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('serviceworker.js')
-   .then(function () {
-    console.log('Service Worker Registered');
-   });
- }
-</script> -->
+  <a-scene>
+   <a-box
+    color="red"
+    position="0 1 -3"
+    rotation="0 45 0"
+    scale="2 2 2"
+   ></a-box>
+   <a-sky color="#ECECEC"></a-sky>
+  </a-scene>
  </body>
 
  <!--memo

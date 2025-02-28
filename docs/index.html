@@ -56,7 +56,11 @@
   <a-scene>
    <h1>てｓｔ</h1>
 
-   <a-assets></a-assets>
+   <a-assets>
+    <a-asset-item
+     id="my-model"
+     src="oasobi.glb"></a-asset-item>
+   </a-assets>
 
    <a-box
     color="red"
@@ -93,6 +97,11 @@
    <a-entity
     particle-system="preset: snow"
     position="0 -1 -10"></a-entity>
+
+   <a-entity
+    gltf-model="#my-model"
+    position="-2 1 -5"
+    scale="0.5 0.5 0.5"></a-entity>
 
    <a-sky material="transparent: true; opacity: 0"></a-sky>
   </a-scene>

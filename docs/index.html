@@ -43,6 +43,7 @@
 
   <!--a-frame -->
   <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+  <script src="https://unpkg.com/@c-frame/aframe-particle-system-component@1.2.x/dist/aframe-particle-system-component.min.js"></script>
 
   <script
    src="main.js"
@@ -72,6 +73,10 @@
     width="4"
     height="4"
     color="#7BC8A4"></a-plane>
+
+   <a-entity
+    particle-system="preset: snow"
+    position="0 0 -10"></a-entity>
 
    <a-sky material="transparent: true; opacity: 0"></a-sky>
   </a-scene>

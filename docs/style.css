@@ -16,6 +16,7 @@ widthにpadding,borderを含ませる
 	font-size: 100%;
 	font-weight: normal;
 }
+
 /*--------------------------------
 とりあえず全要素をinline-blockに指定
 head,head内title,script,にdisplyを指定すると表示されてしまうからdisplyをnone
@@ -29,6 +30,7 @@ html {
 	width: 100%;
 	height: auto;
 }
+
 body {
 	width: 100%;
 	height: auto;
@@ -36,19 +38,23 @@ body {
 	line-height: 1;
 	position: relative;
 }
+
 /*--------
 リンクの下線を基本なし
 -------- */
 a {
 	text-decoration: none;
 }
+
 a:visited {
 	color: inherit;
 }
+
 /*--ここ以降を好きに編集する事----------------------------------------*/
 
 /*--メディアクエリ画面840px以下は適用------*/
 @media screen and (max-width: 840px) {
+
 	/*-----------------------
 リセットcss
 marginとpaddingをとりあえず０に指定
@@ -61,6 +67,7 @@ widthにpadding,borderを含ませる
 		font-size: 100%;
 		font-weight: normal;
 	}
+
 	/*--
 とりあえず全要素をinline-blockに指定
 head,head内title,script,にdisplyを指定すると表示されてしまうからdisplyをnone
@@ -74,6 +81,7 @@ head,head内title,script,にdisplyを指定すると表示されてしまうか�
 		width: 100%;
 		height: auto;
 	}
+
 	body {
 		width: 100%;
 		height: auto;
@@ -81,14 +89,30 @@ head,head内title,script,にdisplyを指定すると表示されてしまうか�
 		line-height: 1;
 		position: relative;
 	}
+
 	/* --リンクの下線を基本なし-------- */
 	a {
 		text-decoration: none;
 	}
+
 	a:visited {
 		color: inherit;
 	}
+
 	/*---ここ以降を好きに編集する事----------------------------------------*/
+
+	body {
+		margin-left: 20%;
+	}
+
+
+
+
+
+
+
+
+
 
 	/*-メディアクエリ用の括弧 削除厳禁---*/
 }

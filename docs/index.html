@@ -25,16 +25,17 @@
   <!-- <meta name="googlebot" content="noindex,nofollow"> -->
 
   <!-- ここから下はページに合わせて編集------------ -->
-  <title>rybcオープンテスト用のページ</title>
+  <title>rybcオープンテスト用のページ - 位置情報表示付き</title>
 
   <meta
    name="description"
-   content="オープンテスト用のページ" />
+   content="オープンテスト用のページ（現在位置表示機能付き）" />
 
   <!-- css -->
   <link
    rel="stylesheet"
    href="style.css" />
+  <!-- 既存のCSS -->
 
   <!--googleフォント -->
   <link
@@ -63,47 +64,158 @@
    name="apple-mobile-web-app-capable"
    content="yes" />
 
+  <!-- ▼▼▼ 位置情報表示用のCSSを追加 ▼▼▼ -->
+  <style>
+   /* 位置情報表示エリアのスタイル */
+   #location-info-overlay {
+    position: fixed; /* 画面上部に固定 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9); /* 半透明の白背景 */
+    padding: 10px 15px; /* 少し小さめのパディング */
+    z-index: 1000; /* ARシーンより手前に表示 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box; /* paddingを含めてwidth 100% */
+    font-family: "M PLUS 1p", sans-serif; /* Googleフォントを適用 */
+    line-height: 1.5; /* 行間調整 */
+    color: #333;
+    font-size: 14px; /* 基本フォントサイズ */
+   }
+
+   #location-info-overlay h1 {
+    color: #0056b3;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.1em; /* 少し小さめ */
+   }
+
+   #location-display {
+    background-color: transparent; /* 背景はオーバーレイに任せる */
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    margin-bottom: 8px; /* 少し詰める */
+    min-height: auto; /* 高さは内容に合わせる */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+   }
+
+   #location-display p {
+    margin: 2px 0; /* さらに詰める */
+    font-size: 0.95em; /* 少し小さめ */
+   }
+
+   #location-display p:first-child {
+    font-weight: bold;
+   }
+
+   .error-message {
+    color: #d9534f;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    padding: 6px 10px; /* 少し小さめ */
+    border-radius: 4px;
+    margin-bottom: 8px; /* 少し詰める */
+    font-size: 0.9em;
+    display: none; /* 初期状態では非表示 */
+   }
+
+   /* ボタンとリンクを横並びにするためのコンテナ */
+   .location-controls {
+    display: flex;
+    align-items: center; /* 垂直方向中央揃え */
+   }
+
+   #refresh-button {
+    display: inline-block;
+    width: auto;
+    padding: 6px 12px; /* 少し小さめ */
+    font-size: 0.9em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px; /* マップリンクとの間隔 */
+   }
+
+   #refresh-button:hover {
+    background-color: #0056b3;
+   }
+
+   #refresh-button:active {
+    background-color: #004085;
+   }
+
+   #map-link-container {
+    display: inline-block; /* JSで制御するため初期はnone */
+    margin-top: 0;
+   }
+
+   #map-link-container a {
+    display: inline-block;
+    padding: 6px 12px; /* 少し小さめ */
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-size: 0.9em;
+   }
+
+   #map-link-container a:hover {
+    background-color: #218838;
+   }
+   /* 既存のbodyスタイル `margin: 0; overflow: hidden;` は維持 */
+  </style>
+  <!-- ▲▲▲ 位置情報表示用のCSSを追加 ▲▲▲ -->
+
   <script
    src="main.js"
    defer></script>
+  <!-- 既存のJS -->
  </head>
  <body style="margin: 0; overflow: hidden">
-  <!-- マーカーベース -->
-  <!-- <a-scene
-   vr-mode-ui="enabled: false;"
-   loading-screen="enabled: false;"
-   renderer="logarithmicDepthBuffer: true;"
-   arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
-   id="scene"
-   gesture-detector>
-   <a-assets>
-    <a-asset-item
-     id="animated-asset"
-     src="assets/oasobi.glb"></a-asset-item>
-   </a-assets>
+  <!-- 既存のbodyスタイル -->
 
-   <a-marker
-    id="animated-marker"
-    type="pattern"
-    preset="custom"
-    url="assets/marker.patt"
-    raycaster="objects: .clickable"
-    emitevents="true"
-    cursor="fuse: false; rayOrigin: mouse;"
-    id="markerA">
-    <a-entity
-     id="bowser-model"
-     scale="0.3 0.3 0.3"
-     animation-mixer="loop: repeat"
-     gltf-model="#animated-asset"
-     class="clickable"
-     gesture-handler></a-entity>
-   </a-marker>
+  <!-- ▼▼▼ 位置情報表示用のHTMLを追加 ▼▼▼ -->
+  <div id="location-info-overlay">
+   <h1>あなたの現在位置</h1>
+   <div id="location-display">
+    <p>位置情報を取得しています...</p>
+    <p>（位置情報へのアクセスを許可してください）</p>
+   </div>
+   <div
+    id="error-display"
+    class="error-message">
+    <!-- エラーメッセージがここに表示されます -->
+   </div>
+   <div class="location-controls">
+    <!-- ボタンとリンクをまとめる -->
+    <button id="refresh-button">再取得</button>
+    <div
+     id="map-link-container"
+     style="display: none">
+     <a
+      id="map-link"
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer">
+      Google Maps
+     </a>
+    </div>
+   </div>
+  </div>
+  <!-- ▲▲▲ 位置情報表示用のHTMLを追加 ▲▲▲ -->
 
-   <a-entity camera></a-entity>
-  </a-scene> -->
+  <!-- マーカーベース (コメントアウトされている部分はそのまま) -->
+  <!-- <a-scene ... </a-scene> -->
 
-  <!-- ロケーションベース -->
+  <!-- ロケーションベース (既存のARシーン) -->
   <a-scene
    vr-mode-ui="enabled: false;"
    loading-screen="enabled: false;"
@@ -122,6 +234,7 @@
     gltf-model="#animated-asset"
     scale="0.318411735213174 0.318411735213174 0.318411735213174"
     gps-entity-place="latitude: 35.03036459685946; longitude: -224.24020201899114;"></a-entity>
+   <!-- 経度がマイナスですが、元のままにしておきます -->
 
    <!-- テスト1my 34.924272019938684, 135.6776500321798 -->
    <a-entity
@@ -153,9 +266,101 @@
     look-controls-enabled="false"
     arjs-look-controls="smoothingFactor: 0.1"
     gps-projected-camera="gpsMinDistance: 100"></a-camera>
+   <!-- gpsMinDistance は必要に応じて調整 -->
 
    <!-- <a-camera gps-new-camera></a-camera> -->
   </a-scene>
+
+  <!-- ▼▼▼ 位置情報取得用のJavaScriptを追加 ▼▼▼ -->
+  <script>
+   document.addEventListener("DOMContentLoaded", () => {
+    const locationDisplay = document.getElementById("location-display");
+    const errorDisplay = document.getElementById("error-display");
+    const refreshButton = document.getElementById("refresh-button");
+    const mapLinkContainer = document.getElementById("map-link-container");
+    const mapLink = document.getElementById("map-link");
+
+    // 位置情報を取得する関数
+    function getLocation() {
+     // エラー表示をクリアし、取得中メッセージを表示
+     errorDisplay.textContent = "";
+     errorDisplay.style.display = "none";
+     locationDisplay.innerHTML = "<p>位置情報を取得しています...</p>";
+     mapLinkContainer.style.display = "none"; // マップリンクを非表示
+
+     if ("geolocation" in navigator) {
+      const options = {
+       enableHighAccuracy: true, // 高精度を試みる (バッテリー消費が増える可能性)
+       timeout: 10000, // 10秒でタイムアウト
+       maximumAge: 0, // キャッシュされた位置情報を使用しない
+      };
+
+      // 現在位置を取得
+      navigator.geolocation.getCurrentPosition(successCallback, errorCallback, options);
+     } else {
+      showError("お使いのブラウザは位置情報取得に対応していません。");
+     }
+    }
+
+    // 位置情報取得成功時の処理
+    function successCallback(position) {
+     const latitude = position.coords.latitude;
+     const longitude = position.coords.longitude;
+     const accuracy = position.coords.accuracy; // メートル単位の精度
+     const timestamp = new Date(position.timestamp).toLocaleString("ja-JP");
+
+     locationDisplay.innerHTML = `
+                  <p>緯度: ${latitude.toFixed(6)}</p>
+                  <p>経度: ${longitude.toFixed(6)}</p>
+                  <p>精度: 約 ${accuracy.toFixed(0)} m</p>
+                  <p>取得時刻: ${timestamp}</p>
+              `;
+
+     // Google Mapsへのリンクを生成・表示
+     const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+     mapLink.href = mapUrl;
+     mapLinkContainer.style.display = "inline-block"; // 表示をinline-blockに変更
+
+     // エラー表示を隠す
+     errorDisplay.style.display = "none";
+    }
+
+    // 位置情報取得失敗時の処理
+    function errorCallback(error) {
+     let message = "位置情報の取得に失敗しました。";
+     switch (error.code) {
+      case error.PERMISSION_DENIED:
+       message = "位置情報へのアクセスが拒否されました。設定を確認してください。";
+       break;
+      case error.POSITION_UNAVAILABLE:
+       message = "現在位置を特定できませんでした。電波状況の良い場所で試してください。";
+       break;
+      case error.TIMEOUT:
+       message = "位置情報の取得がタイムアウトしました。再試行してください。";
+       break;
+      case error.UNKNOWN_ERROR:
+       message = "原因不明のエラーが発生しました。";
+       break;
+     }
+     showError(message);
+     locationDisplay.innerHTML = "<p>位置情報を取得できませんでした。</p>"; // 表示を更新
+     mapLinkContainer.style.display = "none"; // マップリンクを非表示
+    }
+
+    // エラーメッセージを表示する関数
+    function showError(message) {
+     errorDisplay.textContent = message;
+     errorDisplay.style.display = "block"; // エラー表示を表示
+    }
+
+    // 再取得ボタンのクリックイベント
+    refreshButton.addEventListener("click", getLocation);
+
+    // ページ読み込み時に位置情報を自動取得
+    getLocation();
+   });
+  </script>
+  <!-- ▲▲▲ 位置情報取得用のJavaScriptを追加 ▲▲▲ -->
  </body>
 
  <!--memo

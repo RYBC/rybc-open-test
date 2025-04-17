@@ -2,41 +2,12 @@
 
 /*--画面840px以上------*/
 
-/*---------------------------------
-ここからはテンプレート部分
-リセットcss
-marginとpaddingをとりあえず０に指定
-widthにpadding,borderを含ませる
-----------------------------------*/
-* {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	box-sizing: border-box;
-	font-size: 100%;
-	font-weight: normal;
-}
 
-/*--------------------------------
-とりあえず全要素をinline-blockに指定
-head,head内title,script,にdisplyを指定すると表示されてしまうからdisplyをnone
----------------------------------*/
-*:not(head):not(title):not(script) {
-	display: inline-block;
-}
-
-html {
-	display: block;
-	width: 100%;
-	height: auto;
-}
 
 body {
-	width: 100%;
-	height: auto;
+
 	font-family: "M PLUS 1p", sans-serif;
-	line-height: 1;
-	position: relative;
+
 }
 
 /*--------
@@ -54,58 +25,6 @@ a:visited {
 
 /*--メディアクエリ画面840px以下は適用------*/
 @media screen and (max-width: 840px) {
-
-	/*-----------------------
-リセットcss
-marginとpaddingをとりあえず０に指定
-widthにpadding,borderを含ませる
------------*/
-	* {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-		font-size: 100%;
-		font-weight: normal;
-	}
-
-	/*--
-とりあえず全要素をinline-blockに指定
-head,head内title,script,にdisplyを指定すると表示されてしまうからdisplyをnone
----*/
-	*:not(head):not(title):not(script) {
-		display: inline-block;
-	}
-
-	html {
-		display: block;
-		width: 100%;
-		height: auto;
-	}
-
-	body {
-		width: 100%;
-		height: auto;
-		font-family: "M PLUS 1p", sans-serif;
-		line-height: 1;
-		position: relative;
-	}
-
-	/* --リンクの下線を基本なし-------- */
-	a {
-		text-decoration: none;
-	}
-
-	a:visited {
-		color: inherit;
-	}
-
-	/*---ここ以降を好きに編集する事----------------------------------------*/
-
-	body {
-		margin-left: 80%;
-	}
-
-
 
 
 

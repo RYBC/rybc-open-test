@@ -229,7 +229,6 @@
    </a-assets>
    <!-- 良前 -->
    <a-entity
-    look-at="[gps-camera]"
     animation-mixer="loop: repeat"
     gltf-model="#animated-asset"
     scale="1 1 1"
@@ -238,7 +237,6 @@
 
    <!-- テスト1my 34.924272019938684, 135.6776500321798 -->
    <a-entity
-    look-at="[gps-camera]"
     animation-mixer="loop: repeat"
     gltf-model="#animated-asset"
     scale="1 1 1"
@@ -246,7 +244,6 @@
 
    <!-- テスト2学 自転車前 34.921206372792206, 135.68227980403304 -->
    <a-entity
-    look-at="[gps-camera]"
     animation-mixer="loop: repeat"
     gltf-model="#animated-asset"
     scale="1 1 1"
@@ -254,7 +251,6 @@
 
    <!-- テスト3学 クラブ前 34.92152789810246, 135.68127783329965 -->
    <a-entity
-    look-at="[gps-camera]"
     animation-mixer="loop: repeat"
     gltf-model="#animated-asset"
     scale="1 1 1"
@@ -268,7 +264,7 @@
     width="10"></a-box>
 
    <a-camera
-    gps-new-camera="gpsMinDistance: 100"
+    gps-new-camera="gpsMinDistance: 0.5; gpsTimeInterval: 1000"
     rotation-reader
     look-controls-enabled="false"
     arjs-look-controls="smoothingFactor: 0.1"></a-camera>

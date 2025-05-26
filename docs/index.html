@@ -1,119 +1,31 @@
 <!DOCTYPE html>
 <html>
  <head>
-  <meta charset="utf-8" />
-  <meta
-   http-equiv="X-UA-Compatible"
-   content="IE=edge" />
-  <title>GPS AR Application</title>
-  <meta
-   name="viewport"
-   content="width=device-width, initial-scale=1, user-scalable=no" />
-  <!-- A-Frame ライブラリ -->
-  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-  <!-- A-Frame look-at コンポーネント (オブジェクトをカメラに向けるため) -->
-  <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
-  <!-- AR.js ライブラリ (NFTマーカーではなくGPSベースのAR用) -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-gps.js"></script>
-
-  <style>
-   body {
-    margin: 0;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-   }
-   .instructions {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 20px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    border-radius: 5px;
-    text-align: center;
-    z-index: 1000;
-    font-size: 14px;
-   }
-   /* A-Frameのデフォルトローディングスクリーンを非表示にする場合 */
-   .a-loader-title {
-    display: none !important;
-   }
-  </style>
+  <title>Camera Test</title>
  </head>
-
  <body>
-  <!-- ARシーンの定義 -->
-  <!-- VRモードのUIを無効化vr-mode-ui="enabled: false" -->
-  <!-- Webページに埋め込む場合に必要 embedded  -->
-  <!-- sourceType: webcam; /* カメラを使用 */
-        trackingMethod: best; /* トラッキング方法 */
-        debugUIEnabled: false; /* デバッグUIを無効化 */
-        gpsMinDistance: 5; /* GPS更新の最小移動距離 (メートル) */
-        gpsTimeInterval: 1000; /* GPS更新間隔 (ミリ秒) */
-        gpsMinAccuracy: 30; /* GPSの最小精度 (メートル)。これより精度が悪い場合は表示しない */ -->
-
-  <!-- A-Frameのローディング画面を無効化 loading-screen="enabled: false; -->
-  <a-scene
-   vr-mode-ui="enabled: false"
-   embedded
-   arjs="
-            sourceType: webcam; 
-            trackingMethod: best; 
-            debugUIEnabled: true; 
-            gpsMinDistance: 5; 
-            gpsTimeInterval: 1000; 
-            gpsMinAccuracy: 30; 
-        "
-   loading-screen="enabled: false;">
-   <!-- 表示するARオブジェクト -->
-   <!--
-            gps-entity-place属性で緯度(latitude)と経度(longitude)を指定します。
-            以下の値は東京駅付近のものです。ご自身の表示したい場所の緯度経度に変更してください。
-        -->
-   <!-- color="dodgerblue"
-            scale="10 10 10" /* オブジェクトのサイズ (メートル単位) */
-            look-at="[gps-camera]" /* 常にカメラの方を向く */
-            gps-entity-place="latitude: 35.681236; longitude: 139.767125;" /* 表示する緯度経度 */
-            animation__scale="property: scale; to: 12 12 12; dir: alternate; dur: 1000; loop: true" /* 簡単なアニメーション */ -->
-
-   <!-- 自転車  34.92502891531275, 135.69036091111985 -->
-   <!-- ho 34.92426917579231, 135.67761878181574 -->
-
-   <a-box
-    color="dodgerblue"
-    scale="10 10 10"
-    gps-entity-place="latitude: 34.92502891531275; longitude: 135.69036091111985;"
-    gps-entity-place="latitude: 34.92426917579231; longitude: 135.67761878181574;"
-    animation__scale="property: scale; to: 12 12 12; dir: alternate; dur: 1000; loop: true"></a-box>
-   <!-- ユーザーへの案内テキスト (オプション) -->
-   <!-- position="0 -5 -30" /* カメラからの相対位置 (少し手前下方向) */ -->
-   <!-- gps-entity-place="latitude: 35.681236; longitude: 139.767125;" /* テキストも同じ場所に表示 */ -->
-   <a-text
-    value="指定されたGPS地点に青い箱が表示されます"
-    look-at="[gps-camera]"
-    scale="20 20 20"
-    position="0 -5 -30"
-    color="white"
-    gps-entity-place="latitude: 34.92502891531275; longitude: 135.69036091111985;"
-    gps-entity-place="latitude: 34.92426917579231; longitude: 135.67761878181574;"></a-text>
-
-   <!-- ARカメラ: デバイスのGPS位置と方向を追跡 -->
-   <!-- gps-camera /* GPSカメラとして設定 */
-            rotation-reader /* デバイスの回転を読み取る */
-            look-controls-enabled="false" /* マウスやタッチでの視点操作を無効化 (ARでは通常不要) */
-            arjs-look-controls="smoothingFactor: 0.1" /* AR用のスムーズな視点追従 */ -->
-   <a-camera
-    gps-camera
-    rotation-reader
-    look-controls-enabled="false"
-    arjs-look-controls="smoothingFactor: 0.1"></a-camera>
-  </a-scene>
-
-  <div class="instructions">
-   カメラを許可し、指定されたGPS地点の方向を見てください。
-   <br />
-   GPSの精度により表示に時間がかかることがあります。
-  </div>
+  <video
+   id="video"
+   width="320"
+   height="240"
+   autoplay
+   playsinline></video>
+  <script>
+   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices
+     .getUserMedia({ video: true })
+     .then(function (stream) {
+      let video = document.getElementById("video");
+      video.srcObject = stream;
+      video.play();
+     })
+     .catch(function (err) {
+      console.error("Error accessing camera: ", err);
+      alert("カメラアクセスエラー: " + err.message);
+     });
+   } else {
+    alert("お使いのブラウザはカメラアクセスに対応していません。");
+   }
+  </script>
  </body>
 </html>

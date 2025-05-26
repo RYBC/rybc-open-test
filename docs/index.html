@@ -1,375 +1,134 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
  <head>
   <meta charset="utf-8" />
-  <!-- IE対策 -->
   <meta
    http-equiv="X-UA-Compatible"
    content="IE=edge" />
-
-  <!-- レスポンシブ用 -->
+  <title>GPS AR Application</title>
   <meta
    name="viewport"
-   content="width=device-width,initial-scale=1" />
+   content="width=device-width, initial-scale=1, user-scalable=no" />
+  <!-- A-Frame ライブラリ -->
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <!-- A-Frame look-at コンポーネント (オブジェクトをカメラに向けるため) -->
+  <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+  <!-- AR.js ライブラリ (NFTマーカーではなくGPSベースのAR用) -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-gps.js"></script>
 
-  <!-- 電話番号とアドレスをリンクにしない -->
-  <meta
-   name="format-detection"
-   content="email=no,telephone=no,address=no" />
-
-  <!-- 検索に非表示にしたいなら -->
-  <meta
-   name="robots"
-   content="noindex,nofollow" />
-  <!-- google限定 -->
-  <!-- <meta name="googlebot" content="noindex,nofollow"> -->
-
-  <!-- ここから下はページに合わせて編集------------ -->
-  <title>rybcオープンテスト用のページ - 位置情報表示付き</title>
-
-  <meta
-   name="description"
-   content="オープンテスト用のページ（現在位置表示機能付き）" />
-
-  <!-- css -->
-  <link
-   rel="stylesheet"
-   href="style.css" />
-  <!-- 既存のCSS -->
-
-  <!--googleフォント -->
-  <link
-   href="https://fonts.googleapis.com/css?family=M+PLUS+1p"
-   rel="stylesheet" />
-
-  <!--a-frame -->
-  <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
-  <script src="https://unpkg.com/@c-frame/aframe-particle-system-component@1.2.x/dist/aframe-particle-system-component.min.js"></script>
-  <!-- <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script> -->
-  <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-
-  <!--AR.js -->
-  <!--イメージトラッキングAframeバージョン -->
-  <!-- <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script> -->
-  <!--マーカートラッキングAframeバージョン -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
-  <!--ロケーションﾍﾞｰｽAframeバージョン -->
-
-  <!-- Pure three.js code that the A-Frame components use for location-based AR -->
-  <script
-   type="text/javascript"
-   src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/three.js/build/ar-threex-location-only.js"></script>
-
-  <meta
-   name="apple-mobile-web-app-capable"
-   content="yes" />
-
-  <!-- ▼▼▼ 位置情報表示用のCSSを追加 ▼▼▼ -->
   <style>
-   /* 位置情報表示エリアのスタイル */
-   #location-info-overlay {
-    position: fixed; /* 画面上部に固定 */
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.9); /* 半透明の白背景 */
-    padding: 10px 15px; /* 少し小さめのパディング */
-    z-index: 1000; /* ARシーンより手前に表示 */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box; /* paddingを含めてwidth 100% */
-    font-family: "M PLUS 1p", sans-serif; /* Googleフォントを適用 */
-    line-height: 1.5; /* 行間調整 */
-    color: #333;
-    font-size: 14px; /* 基本フォントサイズ */
+   body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
    }
-
-   #location-info-overlay h1 {
-    color: #0056b3;
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.1em; /* 少し小さめ */
-   }
-
-   #location-display {
-    background-color: transparent; /* 背景はオーバーレイに任せる */
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
-    margin-bottom: 8px; /* 少し詰める */
-    min-height: auto; /* 高さは内容に合わせる */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-   }
-
-   #location-display p {
-    margin: 2px 0; /* さらに詰める */
-    font-size: 0.95em; /* 少し小さめ */
-   }
-
-   #location-display p:first-child {
-    font-weight: bold;
-   }
-
-   .error-message {
-    color: #d9534f;
-    background-color: #f2dede;
-    border: 1px solid #ebccd1;
-    padding: 6px 10px; /* 少し小さめ */
-    border-radius: 4px;
-    margin-bottom: 8px; /* 少し詰める */
-    font-size: 0.9em;
-    display: none; /* 初期状態では非表示 */
-   }
-
-   /* ボタンとリンクを横並びにするためのコンテナ */
-   .location-controls {
-    display: flex;
-    align-items: center; /* 垂直方向中央揃え */
-   }
-
-   #refresh-button {
-    display: inline-block;
-    width: auto;
-    padding: 6px 12px; /* 少し小さめ */
-    font-size: 0.9em;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-right: 10px; /* マップリンクとの間隔 */
-   }
-
-   #refresh-button:hover {
-    background-color: #0056b3;
-   }
-
-   #refresh-button:active {
-    background-color: #004085;
-   }
-
-   #map-link-container {
-    display: inline-block; /* JSで制御するため初期はnone */
-    margin-top: 0;
-   }
-
-   #map-link-container a {
-    display: inline-block;
-    padding: 6px 12px; /* 少し小さめ */
-    background-color: #28a745;
+   .instructions {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.7);
     color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    font-size: 0.9em;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 1000;
+    font-size: 14px;
    }
-
-   #map-link-container a:hover {
-    background-color: #218838;
+   /* A-Frameのデフォルトローディングスクリーンを非表示にする場合 */
+   .a-loader-title {
+    display: none !important;
    }
-   /* 既存のbodyスタイル `margin: 0; overflow: hidden;` は維持 */
   </style>
-  <!-- ▲▲▲ 位置情報表示用のCSSを追加 ▲▲▲ -->
-
-  <script
-   src="main.js"
-   defer></script>
-  <!-- 既存のJS -->
  </head>
+
  <body style="margin: 0; overflow: hidden">
-  <!-- 既存のbodyスタイル -->
+  <!-- ARシーンの定義 -->
+  <!-- VRモードのUIを無効化vr-mode-ui="enabled: false" -->
+  <!-- Webページに埋め込む場合に必要 embedded  -->
+  <!-- sourceType: webcam; /* カメラを使用 */
+        trackingMethod: best; /* トラッキング方法 */
+        debugUIEnabled: false; /* デバッグUIを無効化 */
+        gpsMinDistance: 5; /* GPS更新の最小移動距離 (メートル) */
+        gpsTimeInterval: 1000; /* GPS更新間隔 (ミリ秒) */
+        gpsMinAccuracy: 30; /* GPSの最小精度 (メートル)。これより精度が悪い場合は表示しない */ -->
 
-  <!-- ▼▼▼ 位置情報表示用のHTMLを追加 ▼▼▼ -->
-  <div id="location-info-overlay">
-   <h1>あなたの現在位置</h1>
-   <div id="location-display">
-    <p>位置情報を取得しています...</p>
-    <p>（位置情報へのアクセスを許可してください）</p>
-   </div>
-   <div
-    id="error-display"
-    class="error-message">
-    <!-- エラーメッセージがここに表示されます -->
-   </div>
-   <div class="location-controls">
-    <!-- ボタンとリンクをまとめる -->
-    <button id="refresh-button">再取得</button>
-    <div
-     id="map-link-container"
-     style="display: none">
-     <a
-      id="map-link"
-      href="#"
-      target="_blank"
-      rel="noopener noreferrer">
-      Google Maps
-     </a>
-    </div>
-   </div>
-  </div>
-  <!-- ▲▲▲ 位置情報表示用のHTMLを追加 ▲▲▲ -->
-
-  <!-- マーカーベース (コメントアウトされている部分はそのまま) -->
-  <!-- <a-scene ... </a-scene> -->
-
-  <!-- ロケーションベース (既存のARシーン) -->
+  <!-- A-Frameのローディング画面を無効化 loading-screen="enabled: false; -->
   <a-scene
-   vr-mode-ui="enabled: false;"
-   loading-screen="enabled: false;"
-   renderer="logarithmicDepthBuffer: true;"
-   arjs="sourceType: webcam; debugUIEnabled: false;">
-   <a-assets>
-    <a-asset-item
-     id="animated-asset"
-     src="assets/camel.glb"></a-asset-item>
-   </a-assets>
-   <!-- 良前 -->
-   <a-entity
-    animation-mixer="loop: repeat"
-    gltf-model="#animated-asset"
-    scale="1 1 1"
-    gps-entity-place="latitude: 35.03036459685946; longitude: 135.759735;"></a-entity>
-   <!-- 経度がマイナスですが、元のままにしておきます -->
-
-   <!-- テスト1my 34.924272019938684, 135.6776500321798 -->
-   <a-entity
-    animation-mixer="loop: repeat"
-    gltf-model="#animated-asset"
-    scale="1 1 1"
-    gps-entity-place="latitude: 34.9242; longitude: 135.6776;"></a-entity>
-
-   <!-- テスト2学 自転車前 34.921206372792206, 135.68227980403304 -->
-   <a-entity
-    animation-mixer="loop: repeat"
-    gltf-model="#animated-asset"
-    scale="1 1 1"
-    gps-entity-place="latitude: 34.921; longitude: 135.682;"></a-entity>
-
-   <!-- テスト3学 クラブ前 34.92152789810246, 135.68127783329965 -->
-   <a-entity
-    animation-mixer="loop: repeat"
-    gltf-model="#animated-asset"
-    scale="1 1 1"
-    gps-entity-place="latitude: 34.921; longitude: 135.6815;"></a-entity>
-
-   <a-box
-    color="red"
-    gps-new-entity-place="latitude: 35.0303; longitude: 135.7597"
-    depth="10"
-    height="10"
-    width="10"></a-box>
-
+   vr-mode-ui="enabled: false"
+   embedded
+   arjs="
+            sourceType: webcam; 
+            trackingMethod: best; 
+            debugUIEnabled: false; 
+            gpsMinDistance: 5; 
+            gpsTimeInterval: 1000; 
+            gpsMinAccuracy: 30; 
+        "
+   loading-screen="enabled: false;">
+   <!-- ARカメラ: デバイスのGPS位置と方向を追跡 -->
+   <!-- gps-camera /* GPSカメラとして設定 */
+            rotation-reader /* デバイスの回転を読み取る */
+            look-controls-enabled="false" /* マウスやタッチでの視点操作を無効化 (ARでは通常不要) */
+            arjs-look-controls="smoothingFactor: 0.1" /* AR用のスムーズな視点追従 */ -->
    <a-camera
-    gps-new-camera="gpsMinDistance: 0.5; gpsTimeInterval: 1000"
+    gps-camera
     rotation-reader
     look-controls-enabled="false"
     arjs-look-controls="smoothingFactor: 0.1"></a-camera>
-   <!-- gpsMinDistance は必要に応じて調整 -->
+
+   <!-- 表示するARオブジェクト -->
+   <!--
+            gps-entity-place属性で緯度(latitude)と経度(longitude)を指定します。
+            以下の値は東京駅付近のものです。ご自身の表示したい場所の緯度経度に変更してください。
+        -->
+   <!-- color="dodgerblue"
+            scale="10 10 10" /* オブジェクトのサイズ (メートル単位) */
+            look-at="[gps-camera]" /* 常にカメラの方を向く */
+            gps-entity-place="latitude: 35.681236; longitude: 139.767125;" /* 表示する緯度経度 */
+            animation__scale="property: scale; to: 12 12 12; dir: alternate; dur: 1000; loop: true" /* 簡単なアニメーション */ -->
+
+            <!-- 自転車  34.92502891531275, 135.69036091111985 -->
+             
+
+   <a-box
+    color="dodgerblue"
+    scale="10 10 10"
+    gps-entity-place="latitude: 34.92502891531275; longitude: 135.69036091111985;"
+    animation__scale="property: scale; to: 12 12 12; dir: alternate; dur: 1000; loop: true"></a-box>
+     <!-- ユーザーへの案内テキスト (オプション) -->
+   <!-- position="0 -5 -30" /* カメラからの相対位置 (少し手前下方向) */ -->
+   <!-- gps-entity-place="latitude: 35.681236; longitude: 139.767125;" /* テキストも同じ場所に表示 */ -->
+   <a-text
+    value="指定されたGPS地点に青い箱が表示されます"
+    look-at="[gps-camera]"
+    scale="20 20 20"
+    position="0 -5 -30"
+    color="white"
+    gps-entity-place="latitude: 34.92502891531275; longitude: 135.69036091111985;"></a-text>
   </a-scene>
 
-  <!-- ▼▼▼ 位置情報取得用のJavaScriptを追加 ▼▼▼ -->
-  <script>
-   document.addEventListener("DOMContentLoaded", () => {
-    const locationDisplay = document.getElementById("location-display");
-    const errorDisplay = document.getElementById("error-display");
-    const refreshButton = document.getElementById("refresh-button");
-    const mapLinkContainer = document.getElementById("map-link-container");
-    const mapLink = document.getElementById("map-link");
+<!-- ho 34.92426917579231, 135.67761878181574 -->
+    <a-box
+    color="dodgerblue"
+    scale="10 10 10"
+    gps-entity-place="latitude: 34.92426917579231; longitude: 135.67761878181574;"
+    animation__scale="property: scale; to: 12 12 12; dir: alternate; dur: 1000; loop: true"></a-box>
+    <a-text
+    value="指定されたGPS地点に青い箱が表示されます"
+    look-at="[gps-camera]"
+    scale="20 20 20"
+    position="0 -5 -30"
+    color="white"
+    gps-entity-place="latitude: 34.92426917579231; longitude: 135.67761878181574;"></a-text>
+  </a-scene>    
 
-    // 位置情報を取得する関数
-    function getLocation() {
-     // エラー表示をクリアし、取得中メッセージを表示
-     errorDisplay.textContent = "";
-     errorDisplay.style.display = "none";
-     locationDisplay.innerHTML = "<p>位置情報を取得しています...</p>";
-     mapLinkContainer.style.display = "none"; // マップリンクを非表示
 
-     if ("geolocation" in navigator) {
-      const options = {
-       enableHighAccuracy: true, // 高精度を試みる (バッテリー消費が増える可能性)
-       timeout: 10000, // 10秒でタイムアウト
-       maximumAge: 0, // キャッシュされた位置情報を使用しない
-      };
 
-      // 現在位置を取得
-      navigator.geolocation.getCurrentPosition(successCallback, errorCallback, options);
-     } else {
-      showError("お使いのブラウザは位置情報取得に対応していません。");
-     }
-    }
-
-    // 位置情報取得成功時の処理
-    function successCallback(position) {
-     const latitude = position.coords.latitude;
-     const longitude = position.coords.longitude;
-     const accuracy = position.coords.accuracy; // メートル単位の精度
-     const timestamp = new Date(position.timestamp).toLocaleString("ja-JP");
-
-     locationDisplay.innerHTML = `
-                  <p>緯度: ${latitude.toFixed(6)}</p>
-                  <p>経度: ${longitude.toFixed(6)}</p>
-                  <p>精度: 約 ${accuracy.toFixed(0)} m</p>
-                  <p>取得時刻: ${timestamp}</p>
-              `;
-
-     // Google Mapsへのリンクを生成・表示
-     const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-     mapLink.href = mapUrl;
-     mapLinkContainer.style.display = "inline-block"; // 表示をinline-blockに変更
-
-     // エラー表示を隠す
-     errorDisplay.style.display = "none";
-    }
-
-    // 位置情報取得失敗時の処理
-    function errorCallback(error) {
-     let message = "位置情報の取得に失敗しました。";
-     switch (error.code) {
-      case error.PERMISSION_DENIED:
-       message = "位置情報へのアクセスが拒否されました。設定を確認してください。";
-       break;
-      case error.POSITION_UNAVAILABLE:
-       message = "現在位置を特定できませんでした。電波状況の良い場所で試してください。";
-       break;
-      case error.TIMEOUT:
-       message = "位置情報の取得がタイムアウトしました。再試行してください。";
-       break;
-      case error.UNKNOWN_ERROR:
-       message = "原因不明のエラーが発生しました。";
-       break;
-     }
-     showError(message);
-     locationDisplay.innerHTML = "<p>位置情報を取得できませんでした。</p>"; // 表示を更新
-     mapLinkContainer.style.display = "none"; // マップリンクを非表示
-    }
-
-    // エラーメッセージを表示する関数
-    function showError(message) {
-     errorDisplay.textContent = message;
-     errorDisplay.style.display = "block"; // エラー表示を表示
-    }
-
-    // 再取得ボタンのクリックイベント
-    refreshButton.addEventListener("click", getLocation);
-
-    // ページ読み込み時に位置情報を自動取得
-    getLocation();
-   });
-  </script>
-  <!-- ▲▲▲ 位置情報取得用のJavaScriptを追加 ▲▲▲ -->
+  <div class="instructions">
+   カメラを許可し、指定されたGPS地点の方向を見てください。
+   <br />
+   GPSの精度により表示に時間がかかることがあります。
+  </div>
  </body>
-
- <!--memo
-
-
-
-
-
-
-memoの閉じ-->
 </html>

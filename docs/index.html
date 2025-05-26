@@ -60,23 +60,12 @@
    arjs="
             sourceType: webcam; 
             trackingMethod: best; 
-            debugUIEnabled: false; 
+            debugUIEnabled: true; 
             gpsMinDistance: 5; 
             gpsTimeInterval: 1000; 
             gpsMinAccuracy: 30; 
         "
    loading-screen="enabled: false;">
-   <!-- ARカメラ: デバイスのGPS位置と方向を追跡 -->
-   <!-- gps-camera /* GPSカメラとして設定 */
-            rotation-reader /* デバイスの回転を読み取る */
-            look-controls-enabled="false" /* マウスやタッチでの視点操作を無効化 (ARでは通常不要) */
-            arjs-look-controls="smoothingFactor: 0.1" /* AR用のスムーズな視点追従 */ -->
-   <a-camera
-    gps-camera
-    rotation-reader
-    look-controls-enabled="false"
-    arjs-look-controls="smoothingFactor: 0.1"></a-camera>
-
    <!-- 表示するARオブジェクト -->
    <!--
             gps-entity-place属性で緯度(latitude)と経度(longitude)を指定します。
@@ -89,11 +78,13 @@
             animation__scale="property: scale; to: 12 12 12; dir: alternate; dur: 1000; loop: true" /* 簡単なアニメーション */ -->
 
    <!-- 自転車  34.92502891531275, 135.69036091111985 -->
+   <!-- ho 34.92426917579231, 135.67761878181574 -->
 
    <a-box
     color="dodgerblue"
     scale="10 10 10"
     gps-entity-place="latitude: 34.92502891531275; longitude: 135.69036091111985;"
+    gps-entity-place="latitude: 34.92426917579231; longitude: 135.67761878181574;"
     animation__scale="property: scale; to: 12 12 12; dir: alternate; dur: 1000; loop: true"></a-box>
    <!-- ユーザーへの案内テキスト (オプション) -->
    <!-- position="0 -5 -30" /* カメラからの相対位置 (少し手前下方向) */ -->
@@ -104,21 +95,19 @@
     scale="20 20 20"
     position="0 -5 -30"
     color="white"
-    gps-entity-place="latitude: 34.92502891531275; longitude: 135.69036091111985;"></a-text>
-
-   <!-- ho 34.92426917579231, 135.67761878181574 -->
-   <a-box
-    color="dodgerblue"
-    scale="10 10 10"
-    gps-entity-place="latitude: 34.92426917579231; longitude: 135.67761878181574;"
-    animation__scale="property: scale; to: 12 12 12; dir: alternate; dur: 1000; loop: true"></a-box>
-   <a-text
-    value="指定されたGPS地点に青い箱が表示されます"
-    look-at="[gps-camera]"
-    scale="20 20 20"
-    position="0 -5 -30"
-    color="white"
+    gps-entity-place="latitude: 34.92502891531275; longitude: 135.69036091111985;"
     gps-entity-place="latitude: 34.92426917579231; longitude: 135.67761878181574;"></a-text>
+
+   <!-- ARカメラ: デバイスのGPS位置と方向を追跡 -->
+   <!-- gps-camera /* GPSカメラとして設定 */
+            rotation-reader /* デバイスの回転を読み取る */
+            look-controls-enabled="false" /* マウスやタッチでの視点操作を無効化 (ARでは通常不要) */
+            arjs-look-controls="smoothingFactor: 0.1" /* AR用のスムーズな視点追従 */ -->
+   <a-camera
+    gps-camera
+    rotation-reader
+    look-controls-enabled="false"
+    arjs-look-controls="smoothingFactor: 0.1"></a-camera>
   </a-scene>
 
   <div class="instructions">

@@ -1,31 +1,52 @@
 <!DOCTYPE html>
 <html>
  <head>
-  <title>Camera Test</title>
+  <meta charset="utf-8" />
+  <meta
+   http-equiv="X-UA-Compatible"
+   content="IE=edge" />
+  <title>GPS AR App</title>
+  <meta
+   name="viewport"
+   content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <!-- A-Frame Library -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <!-- AR.js Library for A-Frame -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <link
+   rel="stylesheet"
+   href="style.css" />
  </head>
- <body>
-  <video
-   id="video"
-   width="320"
-   height="240"
-   autoplay
-   playsinline></video>
-  <script>
-   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices
-     .getUserMedia({ video: true })
-     .then(function (stream) {
-      let video = document.getElementById("video");
-      video.srcObject = stream;
-      video.play();
-     })
-     .catch(function (err) {
-      console.error("Error accessing camera: ", err);
-      alert("カメラアクセスエラー: " + err.message);
-     });
-   } else {
-    alert("お使いのブラウザはカメラアクセスに対応していません。");
-   }
-  </script>
+ <body style="margin: 0; overflow: hidden">
+  <div id="status-messages">Initializing...</div>
+
+  <!-- A-Frame Scene -->
+  <a-scene
+   vr-mode-ui="enabled: false"
+   arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+   renderer="logarithmicDepthBuffer: true;"
+   embedded>
+   <!-- 3D Model Entity -->
+   <!-- The 'gps-entity-place' attribute will be set by script.js with target coordinates -->
+   <!-- TODO: Replace with your model URL -->
+   <!-- Y position is height above ground at target GPS. Assumes model pivot is at its base. -->
+   <!-- Makes the model face the camera -->
+   <!-- Initially hidden -->
+   <a-entity
+    id="model"
+    gltf-model="rybc-open-test\docs\assets\camel.glb"
+    scale="0.5 0.5 0.5"
+    position="0 0.5 0"
+    look-at="[gps-camera]"
+    visible="false"></a-entity>
+
+   <!-- AR Camera with GPS capabilities -->
+   <!-- For desktop testing, you can simulate GPS: gps-camera="simulateLatitude: YOUR_SIM_LAT; simulateLongitude: YOUR_SIM_LON; simulatePosition: true" -->
+   <a-camera
+    gps-camera="minDistance: 1; maxDistance: 10000;"
+    rotation-reader></a-camera>
+  </a-scene>
+
+  <script src="script.js"></script>
  </body>
 </html>

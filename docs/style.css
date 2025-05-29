@@ -1,56 +1,24 @@
-@charset "utf-8";
-
-/*--画面840px以上------*/
-
-
-
 body {
-
-	font-family: "M PLUS 1p", sans-serif;
-
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
 }
 
-/*--------
-リンクの下線を基本なし
--------- */
-a {
-	text-decoration: none;
+#status-messages {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 10000;
+    /* Ensure it's on top of A-Frame canvas */
+    font-size: 12px;
+    max-height: 120px;
+    /* Limit height */
+    overflow-y: auto;
+    /* Allow scrolling if content exceeds max-height */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-
-a:visited {
-	color: inherit;
-}
-
-/*--ここ以降を好きに編集する事----------------------------------------*/
-
-/*--メディアクエリ画面840px以下は適用------*/
-@media screen and (max-width: 840px) {
-
-
-
-
-
-
-
-
-	/*-メディアクエリ用の括弧 削除厳禁---*/
-}
-
-/* memo----- 
-border-radius:1%/5%;
-border-radius:水平/垂直;
-border-radius:左上 右上 右下 左下 / 左上 右上 右下 左下;
-border-radius:全部;
-
-
-
- 
-
-
-
-
-
-
-
-
-memoの閉じ*/

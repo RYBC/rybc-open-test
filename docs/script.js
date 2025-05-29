@@ -10,8 +10,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
  // --- Configuration ---
  // TODO: Replace with your actual target GPS coordinates
- const TARGET_LATITUDE = 35.681236; // Example: Tokyo Station
- const TARGET_LONGITUDE = 139.767125; // Example: Tokyo Station
+ const TARGET_LATITUDE = 35.030925; // Example: Tokyo Station
+ const TARGET_LONGITUDE = 135.759688; // Example: Tokyo Station
  const VISIBILITY_RADIUS_METERS = 30; // Show model when within this many meters
 
  // Set the target GPS coordinates for the model entity

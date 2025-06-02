@@ -1,5 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
  const modelEntity = document.getElementById("model");
+ const modelEntity2 = document.getElementById("blueSphere");
  const statusMessagesDiv = document.getElementById("status-messages");
 
  if (!modelEntity) {
@@ -57,9 +58,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
   if (distance < VISIBILITY_RADIUS_METERS) {
    modelEntity.setAttribute("visible", "true");
+   modelEntity2.setAttribute("visible", "true");
    statusText += `<br><b>Target is nearby! Model should be visible.</b>`;
   } else {
    modelEntity.setAttribute("visible", "false");
+   modelEntity2.setAttribute("visible", "false");
    statusText += `<br>目標地点から遠すぎます。 (${(distance - VISIBILITY_RADIUS_METERS).toFixed(
     0
    )}m 離れています。). 目標地点へ移動してください。`;

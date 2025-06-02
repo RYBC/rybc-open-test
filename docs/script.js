@@ -17,6 +17,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
  // Set the target GPS coordinates for the model entity
  modelEntity.setAttribute("gps-entity-place", `latitude: ${TARGET_LATITUDE}; longitude: ${TARGET_LONGITUDE};`);
+ modelEntity2.setAttribute("gps-entity-place", `latitude: ${TARGET_LATITUDE}; longitude: ${TARGET_LONGITUDE};`);
 
  function updateStatus(message, clearPrevious = false) {
   console.log(message);

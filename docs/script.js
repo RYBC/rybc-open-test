@@ -60,7 +60,9 @@ window.addEventListener("DOMContentLoaded", () => {
    statusText += `<br><b>Target is nearby! Model should be visible.</b>`;
   } else {
    modelEntity.setAttribute("visible", "false");
-   statusText += `<br>Target is too far (${(distance - VISIBILITY_RADIUS_METERS).toFixed(0)}m away). Move closer.`;
+   statusText += `<br>目標地点から遠すぎます。 (${(distance - VISIBILITY_RADIUS_METERS).toFixed(
+    0
+   )}m 離れています。). 目標地点へ移動してください。`;
   }
   updateStatus(statusText, true); // Clear previous and set new status
  }

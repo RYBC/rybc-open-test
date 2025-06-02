@@ -47,13 +47,13 @@ window.addEventListener("DOMContentLoaded", () => {
   const currentLon = position.coords.longitude;
   const accuracy = position.coords.accuracy;
 
-  let statusText = `Your Location: Lat: ${currentLat.toFixed(6)}, Lon: ${currentLon.toFixed(
-   6
-  )} (Acc: ${accuracy.toFixed(1)}m)`;
+  let statusText = `現在位置: Lat: ${currentLat.toFixed(6)}, Lon: ${currentLon.toFixed(6)} (Acc: ${accuracy.toFixed(
+   1
+  )}m)`;
 
   const distance = calculateDistance(currentLat, currentLon, TARGET_LATITUDE, TARGET_LONGITUDE);
-  statusText += `<br>Target: Lat: ${TARGET_LATITUDE.toFixed(6)}, Lon: ${TARGET_LONGITUDE.toFixed(6)}`;
-  statusText += `<br>Distance to target: ${distance.toFixed(1)} meters.`;
+  statusText += `<br>目標地点: Lat: ${TARGET_LATITUDE.toFixed(6)}, Lon: ${TARGET_LONGITUDE.toFixed(6)}`;
+  statusText += `<br>目標地点との距離: ${distance.toFixed(1)} meters.`;
 
   if (distance < VISIBILITY_RADIUS_METERS) {
    modelEntity.setAttribute("visible", "true");
